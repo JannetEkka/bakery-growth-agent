@@ -11,7 +11,7 @@ maps_toolset = tools.get_maps_mcp_toolset()
 bigquery_toolset = tools.get_bigquery_mcp_toolset()
 
 root_agent = LlmAgent(
-    model="gemini-2.0-flash",
+    model="gemini-3.1-pro-preview",
     name="bakery_growth_agent",
     instruction=f"""
         You are the **Bakery Growth Intelligence Agent** — a strategic advisor for a
