@@ -10,40 +10,37 @@ BIGQUERY_MCP_URL = "https://bigquery.googleapis.com/mcp"
 
 
 def get_maps_mcp_toolset():
-    """Configure MCP toolset for Google Maps Grounding Lite."""
     dotenv.load_dotenv()
-    maps_api_key = os.getenv("MAPS_API_KEY", "no_api_found")
-
-    toolset = MCPToolset(
+    maps_api_key = os.getenv('MAPS_API_KEY', 'no_api_found')
+    tools = MCPToolset(
         connection_params=StreamableHTTPConnectionParams(
             url=MAPS_MCP_URL,
             headers={"X-Goog-Api-Key": maps_api_key},
             timeout=30.0,
-            sse_read_timeout=300.0,
+            sse_read_timeout=300.0
         )
     )
     print("Maps MCP Toolset configured.")
-    return toolset
+    return tools
 
 
 def get_bigquery_mcp_toolset():
-    """Configure MCP toolset for BigQuery using ADC OAuth."""
     credentials, project_id = google.auth.default(
         scopes=["https://www.googleapis.com/auth/bigquery"]
     )
     credentials.refresh(google.auth.transport.requests.Request())
     oauth_token = credentials.token
 
-    toolset = MCPToolset(
+    tools = MCPToolset(
         connection_params=StreamableHTTPConnectionParams(
             url=BIGQUERY_MCP_URL,
             headers={
                 "Authorization": f"Bearer {oauth_token}",
                 "x-goog-user-project": project_id,
             },
-            timeout=30.0,
-            sse_read_timeout=300.0,
+            timeout=60.0,
+            sse_read_timeout=600.0
         )
     )
     print("BigQuery MCP Toolset configured.")
-    return toolset
+    return tools
